@@ -1,4 +1,6 @@
-# admin
+# Reop Client admin 模块
+
+## 这个模块是Reop Client前端项目的后台管理模块
 
 This template should help get you started developing with Vue 3 in Vite.
 

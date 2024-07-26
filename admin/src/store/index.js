@@ -10,6 +10,7 @@ export default createStore({
     gettrts:{
     },
     mutations:{
+        //第一次访问路由时生成路由
         changeGetterRouter(state,value){
             state.isGetterRouter = value
         },
@@ -17,6 +18,7 @@ export default createStore({
         changeCollapsed(state){
             state.isCollapsed = !state.isCollapsed
         },
+        //用户信息
         changeUserInfo(state,value){
             state.userInfo = {
                 ... state.userInfo,

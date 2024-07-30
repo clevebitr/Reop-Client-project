@@ -32,11 +32,10 @@
                         <el-button size="small" @click="handleEdit(scope.row)">
                             编辑
                         </el-button>
-                        <el-popconfirm title="你确定要删除吗"
-                        confirm-button-text="确定"
-                        cancel-button-text="取消" @confirm="handleDelete(scope.row)">
+                        <el-popconfirm title="你确定要删除吗" confirm-button-text="确定" cancel-button-text="取消"
+                            @confirm="handleDelete(scope.row)">
                             <template #reference>
-                                <el-button size="small" type="danger" >
+                                <el-button size="small" type="danger">
                                     删除
                                 </el-button>
                             </template>
@@ -46,29 +45,117 @@
                 </el-table-column>
             </el-table>
         </el-card>
+        <el-dialog v-model="dialogVisible" title="编辑用户" width="500">
+            <el-form :model="userFrom" label-width="auto" ref="userFromRef" :rules="userFromRules"
+                class="demo-ruleFrom">
+                <el-form-item label="用户名" prop="uname">
+                    <el-input v-model="userFrom.uname" />
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                    <el-input v-model="userFrom.email" />
+                </el-form-item>
+                <el-form-item label="密码" prop="upwd">
+                    <el-input v-model="userFrom.upwd" type="password" />
+                </el-form-item>
+                <el-form-item label="角色" prop="role">
+                    <el-select v-model="userFrom.role" class="m-2" placeholder="Select">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="简介" prop="introduction">
+                    <el-input v-model="userFrom.introduction" type="textarea" />
+                </el-form-item>
+            </el-form>
+            <template #footer>
+                <div class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="handleEditConfirm()">
+                        确认
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import axios from 'axios';
+const dialogVisible = ref(false)
 const tableData = ref([])
+
+const userFromRef = ref()
+let userFrom = reactive({
+    id:'',
+    uname: '',
+    email: '',
+    upwd: '',
+    role: 2,//1管理，2编辑
+    introduction: ''
+})
+const userFromRules = reactive({
+    uname: [
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+    ],
+    email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur' },
+    ],
+    upwd: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+    ],
+    role: [
+        { required: true, message: '请选择权限', trigger: 'blur' },
+    ],
+    introduction: [
+        { required: true, message: '请输入简介', trigger: 'blur' },
+    ]
+})
+
+const options = [{
+    label: '管理员',
+    value: 1
+}, {
+    label: '编辑',
+    value: 2
+}]
+
 onMounted(() => {
     getTableData()
 })
+
+//编辑确认回调
+const handleEditConfirm = ()=>{
+    userFromRef.value.validate(async (valid)=>{
+        if (valid) {
+            await axios.put(`http://localhost:3000/adminapi/user/list/${userFrom.id}`,userFrom).then(res=>{
+                if (res.data.ActionType === "OK") {
+                    getTableData()
+                }
+            })
+        }
+    })
+
+    dialogVisible.value = false
+}
 
 const getTableData = async () => {
     const res = await axios.get("http://localhost:3000/adminapi/user/list")
     //console.log(res.data)
     tableData.value = res.data.data
 }
-
-const handleEdit = (data) => {
-    console.log(data)
+//编辑回调
+const handleEdit = async data => {
+    const res = await axios.get(`http://localhost:3000/adminapi/user/list/${data.id}`)
+    // console.log(res.data.data)
+    Object.assign(userFrom,res.data.data)
+    dialogVisible.value = true
 }
 
-const handleDelete = (data) => {
-    console.log(data)
+
+const handleDelete = async data => {
+    // console.log(data)
+    await axios.delete(`http://localhost:3000/adminapi/user/list/${data.id}`)
+    getTableData()
 }
 </script>
 

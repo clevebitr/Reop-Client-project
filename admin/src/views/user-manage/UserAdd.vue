@@ -99,7 +99,7 @@ const submitForm = ()=>{
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .demo-ruleFrom {
     margin-top: 50px;
 }

@@ -65,9 +65,10 @@ const submitForm = () => {
         // console.log(valid)
         if (valid) {
             axios.post('http://localhost:3000/adminapi/user/login',loginForm).then(res=>{
-                console.log(res.data)
+                //console.log(res.data)
                 if (res.data.ActionType === "OK") {
                     store.commit("changeUserInfo",res.data.data)
+                    store.commit("changeGetterRouter",false)
                     router.push("/index")
                 }else{
                     ElMessage.error('用户名或密码错误')

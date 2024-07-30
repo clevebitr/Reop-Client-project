@@ -35,8 +35,11 @@ router.beforeEach((to,from,next)=>{
         path:"/login"
       })
     }else{
-      //放行
+      
       if (!store.state.isGetterRouter) {//是否第一次创建路由
+        //删除嵌套路由
+        router.removeRoute("mainbox")
+        //创建路由
         ConfigRouter()
         next({
           path:to.fullPath
@@ -49,14 +52,27 @@ router.beforeEach((to,from,next)=>{
 })
 
 const ConfigRouter = () =>{
+  if (!router.hasRoute("mainbox")) {
+    router.addRoute({
+        path:"/mainbox",
+        name:"mainbox",
+        component:MainBox
+    })
+  }
   //动态路由
   ConfigRoutes.forEach(item=>{
-    router.addRoute('mainbox',item)
+    checkPermission(item) && router.addRoute('mainbox',item)
   })
 
   //更改状态
   store.commit("changeGetterRouter",true)
 }
 
+const checkPermission = (item)=>{
+  if (item.requireAdmin) {
+    return store.state.userInfo.role ===1
+  }
+  return true
+}
 
 export default router

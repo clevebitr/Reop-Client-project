@@ -88,10 +88,10 @@ const handleChange = (file) => {
 const submitForm = () => {
     userFromRef.value.validate(async (valid) => {
         if (valid) {
-            console.log('submit', userFrom)
+            // console.log('submit', userFrom)
             //转换数据格式
             const res = await upload('http://localhost:3000/adminapi/user/upload', userFrom)
-            console.log(res)
+            //console.log(res)
             if (res.ActionType === "OK") {
                 store.commit('changeUserInfo', res.data)
                 ElMessage.success('更新成功')

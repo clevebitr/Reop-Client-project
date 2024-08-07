@@ -1,3 +1,5 @@
+<!-- 新闻列表 -->
+
 <template>
     <div>
         <el-card>
@@ -29,7 +31,7 @@
                     <template #default="scope">
                         <el-button circle :icon="View" type="success" @click="handlePreview(scope.row)">
                         </el-button>
-                        <el-button circle :icon="Edit">
+                        <el-button circle :icon="Edit" @click="handleEdit(scope.row)" >
                         </el-button>
                         <el-popconfirm title="你确定删除吗" confirmButtonText="确定" cancelButtonText="取消"
                             @confirm="handleDelete(scope.row)">
@@ -42,13 +44,13 @@
                 </el-table-column>
             </el-table>
         </el-card>
-        <el-dialog v-model="dialogVisible" title="预览新闻" width="50%" class="htmlcontent">
+        <el-dialog v-model="dialogVisible" title="预览新闻" width="40%" class="htmlcontent">
             <div>
                 <h2>{{ previewData.title }}</h2>
                 <div style="font-size: 12px;color: gray;">{{ formatTime.getTime(previewData.editTime) }}</div>
 
                 <el-divider>
-                    <el-icon><star-filled /></el-icon>
+                    <el-icon ><star-filled  /></el-icon>
                 </el-divider>
 
                 <div v-html="previewData.content"></div>
@@ -58,12 +60,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import formatTime from '@/util/formatTime';
 import { Edit, View, Delete, StarFilled } from "@element-plus/icons-vue"
-import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const previewData = ref({})
 const dialogVisible = ref(false)
 const tableData = ref([])
@@ -90,7 +93,7 @@ const handleSwitchChange = async (item) => {
         isPublish: item.isPublish
     })
 
-    await getTableData()
+    await getTableData()//刷新新闻列表
 }
 //预览回调
 const handlePreview = (data) => {
@@ -103,6 +106,10 @@ const handleDelete = async (data) => {
     // console.log(data.id)
     await axios.delete(`http://localhost:3000/adminapi/news/list/${data.id}`)
     await getTableData()
+}
+
+const handleEdit = (item)=>{
+    router.push(`/news-manage/editnews/${item.id}`)
 }
 </script>
 

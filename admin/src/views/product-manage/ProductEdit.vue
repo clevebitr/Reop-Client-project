@@ -1,8 +1,8 @@
 <template>
     <div>
-        <el-page-header icon="" title="产品管理">
+        <el-page-header @back="handleBack" title="产品管理">
             <template #content>
-                <span class="text-large font-600 mr-3"> 添加产品 </span>
+                <span class="text-large font-600 mr-3"> 编辑产品 </span>
             </template>
         </el-page-header>
 
@@ -19,9 +19,9 @@
             <el-form-item label="封面" prop="cover">
                 <Upload :avatar="productFrom.cover" @-r-e-o-p-change="coverhandleChange" />
             </el-form-item>
-            <el-form-item label="操作">
+            <el-form-item label="编辑新闻">
                 <el-button type="primary" @click="submitForm()">
-                    创建产品
+                    更新
                 </el-button>
             </el-form-item>
         </el-form>
@@ -29,13 +29,15 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import Upload from '@/components/upload/Upload.vue';
 import upload from '@/util/upload';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import axios from 'axios';
 const router = useRouter()
+const route = useRoute()
 const productFromRef = ref()
-const productFrom = reactive({
+let productFrom = reactive({
     title: '',
     cover: '',
     summary:'',
@@ -66,13 +68,26 @@ const submitForm = () => {
     productFromRef.value.validate(async (valid) => {
         if (valid) {
             //提交数据
-            //console.log(newsFrom)
-            await upload('http://localhost:3000/adminapi/product/add',productFrom)
-            router.push("/product-manage/list")
+            console.log(productFrom)
+            await upload('http://localhost:3000/adminapi/product/list', productFrom)
+            //router.push("/news-manage/list")
             // router.push("/user-manage/list")
+            router.back()
         }
     })
 }
+
+const handleBack = () => {
+    router.back()
+}
+
+onMounted(async () => {
+    console.log(route.params.id)
+    const id = route.params.id
+    const res = await axios.get(`http://localhost:3000/adminapi/product/list/${id}`)
+    console.log(res.data.data)
+    Object.assign(productFrom,res.data.data)
+})
 </script>
 
 <style lang="scss" scoped>

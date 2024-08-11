@@ -27,7 +27,7 @@
             <el-form-item label="头像" prop="avatar">
                 <Upload :avatar="userFrom.avatar" @-r-e-o-p-change="handleChange" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item label="操作">
                 <el-button type="primary" @click="submitForm()">
                     添加用户
                 </el-button>

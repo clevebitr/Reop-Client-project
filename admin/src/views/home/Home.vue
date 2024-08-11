@@ -23,7 +23,7 @@
         <span>产品</span>
       </div>
     </template>
-    <el-carousel :interval="4000" type="card" height="200px" v-if="looplist.length">
+    <el-carousel :interval="4000" type="card" height="400px" v-if="looplist.length">
       <el-carousel-item v-for="item in looplist" :key="item.id">
         <div :style="{backgroundImage:`url(http://localhost:3000${item.cover})`,backgroundSize:'cover'}">
           <h3>{{ item.title }}</h3>
@@ -61,7 +61,7 @@ const getData = async () => {
 .el-carousel__item h3 {
   color: white;
   opacity: 0.75;
-  line-height: 200px;
+  line-height: 400px;
   margin: 0;
   text-align: center;
 }

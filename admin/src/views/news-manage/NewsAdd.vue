@@ -7,6 +7,11 @@
         </el-page-header>
 
         <el-form :model="newsFrom" label-width="auto" ref="newsFromRef" :rules="newsFromRules" class="demo-ruleFrom">
+            <el-form-item label="操作">
+                <el-button type="primary" @click="submitForm()">
+                    创建新闻
+                </el-button>
+            </el-form-item>
             <el-form-item label="标题" prop="title">
                 <el-input v-model="newsFrom.title" />
             </el-form-item>
@@ -21,11 +26,7 @@
             <el-form-item label="内容" prop="content">
                 <editor @event="handleChange" />
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm()">
-                    创建新闻
-                </el-button>
-            </el-form-item>
+
         </el-form>
     </div>
 </template>

@@ -23,6 +23,10 @@
                 </div>
             </el-popover>
         </div>
+
+        <div class="topnews">
+            
+        </div>
     </div>
 </template>
 
@@ -44,6 +48,7 @@ onMounted(async ()=>{
 
 const searchnewslist = computed(()=>searchText.value?newsList.value.filter(item=>item.title.includes(searchText.value)):[])
 
+const topNewsList = computed(()=>newsList.value.slice(0,4))
 </script>
 
 <style scoped lang="scss">
@@ -74,5 +79,9 @@ const searchnewslist = computed(()=>searchText.value?newsList.value.filter(item=
         background: whitesmoke;
         color: blue;
     }
+}
+
+.topnews{
+    margin-top: 20px;
 }
 </style>

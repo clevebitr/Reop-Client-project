@@ -2,10 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import News from '../views/News.vue'
 import Product from '../views/Product.vue'
-import nProgress from 'nprogress'
 import New from '@/views/New.vue'
-import 'nprogress/nprogress.css'
-
+import NProgress from 'nprogress'  
+import 'nprogress/nprogress.css'  
 
 const routes = [
   {
@@ -37,12 +36,12 @@ const router = createRouter({
 
 //加载进度条
 router.beforeEach((to,from,next)=>{
-  nProgress.start();
+  NProgress.start();
   next()
 })
 
 router.afterEach((to,from)=>{
-  nProgress.done();
+  NProgress.done();
 })
 
 export default router

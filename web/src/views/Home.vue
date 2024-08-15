@@ -17,7 +17,6 @@
 <script setup>
 import png1 from '@/assets/home1.png'
 import png2 from '@/assets/home2.png'
-console.log(png1)
 </script>
 
 <style scoped lan="scss">

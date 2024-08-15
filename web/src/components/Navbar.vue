@@ -27,5 +27,6 @@ const handleClick = () =>{
 .navbar{
     position: sticky;
     top:0px;
+    z-index: 10000;
 }
 </style>

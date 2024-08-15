@@ -42,7 +42,7 @@ onMounted(async ()=>{
     newsList.value = res.data.data
 })
 
-const searchnewslist = computed(()=>newsList.value.filter(item=>item.title.includes(searchText.value)))
+const searchnewslist = computed(()=>searchText.value?newsList.value.filter(item=>item.title.includes(searchText.value)):[])
 
 </script>
 
